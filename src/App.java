@@ -13,12 +13,61 @@ public class App {
                 2.- Cargar Juego
                 3.- Consultar puntuaciones
                 4.- Salir
+                
+                Elija una opción:
+                 
                 """);
     }
-    static public void seleccion (int opt) {
+    static public void inicioJuego() {
+//        Llamada de metodos para el inicio del juego
+
+    }
+    public static void main(String[] args) {
+        FileReader fr = null;
+        BufferedReader br = null;
+        Scanner lector = new Scanner(System.in);
+        Scanner lectorpalabras = null;
+        ArrayList<String> listaNomOcultos = null;
+//      Cargar palabras en RAM
+        try {
+            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/Palabras5L.txt");
+            br = new BufferedReader(fr);
+            listaNomOcultos = new ArrayList<>();
+
+            String linea = null,palabra = null;
+
+            while ((linea = br.readLine()) != null){
+                lectorpalabras = new Scanner(linea);
+                lectorpalabras.useDelimiter(",");
+                while (lectorpalabras.hasNext()){
+                    palabra = lectorpalabras.next();
+                    listaNomOcultos.add(palabra);
+                }
+            }
+        }catch (IOException e){
+            e.getMessage();
+        }finally {
+            try{
+                br.close();
+                fr.close();
+                lectorpalabras.close();
+            }catch (IOException e){
+                e.getMessage();
+            }
+        }
+        
+
+
+
+//      Declaracio+n de variables del MAIN
+        int opt = 0;
+
+        menu();
+        opt = lector.nextInt();
         switch (opt){
             case 1:
 //              Llamada a la función para iniciar un juego nuevo.
+
 
                 break;
             case 2:
@@ -36,32 +85,5 @@ public class App {
             default:
                 System.out.println("elija una opción válida");
         }
-    }
-    public static void main(String[] args) {
-        FileReader fr = null;
-        BufferedReader br = null;
-        int opt = 0;
-        Scanner lector = new Scanner(System.in);
-//        Creacion de Collección
-        ArrayList<Palabra> lista = new ArrayList<Palabra>();
-        menu();
-        System.out.println("Elija una opción: ");
-
-        try {
-            opt = lector.nextInt();
-        }catch (InputMismatchException e){
-            System.out.println("Lo introducido por teclado, no es correcto tiene que ser un numero del 1 al 4");
-        }
-
-        try {
-            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/Palabras5L.txt");
-            br = new BufferedReader(fr);
-
-//            Cargar el archivo de palabran en memoria RAM en una coleccion.
-
-        }catch (IOException e){
-            e.getMessage();
-        }
-
     }
 }
