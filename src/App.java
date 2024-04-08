@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
     static public void menu (){
@@ -18,16 +15,27 @@ public class App {
                  
                 """);
     }
-    static public void inicioJuego() {
-//        Llamada de metodos para el inicio del juego
+    static public void buscarPalabra (int contaPalabra) {
+        Random random = new Random(contaPalabra);
+
 
     }
+    static public void iniciarJuego() {
+//        Llamada de metodos para el inicio del juego
+//    buscarPalabra();
+    }
+
     public static void main(String[] args) {
         FileReader fr = null;
         BufferedReader br = null;
         Scanner lector = new Scanner(System.in);
         Scanner lectorpalabras = null;
         ArrayList<String> listaNomOcultos = null;
+
+//        Variables
+        int opt = 0,contaPalabra = 0;
+
+
 //      Cargar palabras en RAM
         try {
             fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/Palabras5L.txt");
@@ -42,9 +50,12 @@ public class App {
                 while (lectorpalabras.hasNext()){
                     palabra = lectorpalabras.next();
                     listaNomOcultos.add(palabra);
+                    contaPalabra++;
                 }
             }
         }catch (IOException e){
+            e.getMessage();
+        }catch (Exception e) {
             e.getMessage();
         }finally {
             try{
@@ -55,32 +66,33 @@ public class App {
                 e.getMessage();
             }
         }
-        
-
-
-
-//      Declaracio+n de variables del MAIN
-        int opt = 0;
-
+        System.out.println(contaPalabra);
+//        Menu del juego
         menu();
-        opt = lector.nextInt();
+        try {
+            opt = lector.nextInt();
+        }catch (InputMismatchException e){
+            e.getMessage();
+        }catch (Exception e){
+            e.getMessage();
+        }
+
         switch (opt){
             case 1:
 //              Llamada a la función para iniciar un juego nuevo.
-
-
+                iniciarJuego();
                 break;
             case 2:
 //              Llamada para continuar un juego guardado
-
+//                cargarJuego();
                 break;
             case 3:
 //              Llamada a listado de puntuaciones
-
+//                listarPuntuaciones();
                 break;
             case 4:
 //              Salir del menu
-
+                System.out.println("Saliendo del juego");
                 break;
             default:
                 System.out.println("elija una opción válida");
