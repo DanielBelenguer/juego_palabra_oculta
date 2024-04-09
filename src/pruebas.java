@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class pruebas {
-    static public String buscarPalabra (ArrayList<String> listaNomOcultos, int contaPalabra) {
+    static public String buscarPalabra (ArrayList<String> listaNomOcultos, int contador) {
         Random random = new Random();
-        int num = random.nextInt(contaPalabra);
+        int num = random.nextInt(contador);
         String palabraOculta = listaNomOcultos.get(num);
         return palabraOculta;
     }
