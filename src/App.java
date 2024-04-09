@@ -20,6 +20,16 @@ public class App {
                  
                 """);
     }
+    static public void menuTurno (){
+        System.out.println("""
+                
+                1.- Continuar
+                2.- Guardar juego
+                
+                Introduce 1 o 2:
+                
+                """);
+    }
     static public String buscarPalabra (ArrayList<String> listaNomOcultos) {
         Random random = new Random();
         int num = random.nextInt(listaNomOcultos.size());
@@ -30,7 +40,7 @@ public class App {
     static public void iniciarJuego(ArrayList<String> listaNomOcultos, int contaPalabra,Scanner lector) {
 //  Generar la palabra oculta
     String palabraOculta = buscarPalabra(listaNomOcultos);
-//    Variables
+//  Variables
         ArrayList<String> listaIntentos = new ArrayList<>();
         int contadorIntentos = 6,puntuacion=0;
 //  Comienzo de juego
@@ -54,22 +64,76 @@ public class App {
             }else {
                 System.out.println("La palabra introducida no tiene 5 letras.");
             }
+            menuTurno();
+            int opt = 0;
+            try {
+                opt = lector.nextInt();
+            }catch (InputMismatchException e){
+                e.getMessage();
+            }catch (Exception e){
+                e.getMessage();
+            }
+            switch (opt){
+                case 1:
+                    System.out.println("Continuamos.....");
+                    break;
+                case 2:
+                    System.out.println("Vamos a guardar la partida");
+                    String nombreJuegoGuardado = lector.nextLine();
+//                    JuegoGuardado nombreJuegoGuardado = new JuegoGuardado();
+                    break;
+                default:
+
+            }
         }
     }
     public static void main(String[] args) {
         FileReader fr = null;
+        FileReader fr2 = null;
         BufferedReader br = null;
+        BufferedReader br2 = null;
         Scanner lector = new Scanner(System.in);
         Scanner lectorpalabras = null;
         ArrayList<String> listaNomOcultos = null;
+        HashMap puntuaciones = null;
 
 //        Variables
         int opt = 0,contaPalabra = 0;
         boolean salirjuego = false;
 
-//      Cargar palabras en RAM
+//      Cargar puntuaciones en HasMap
         try {
-            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/Palabras5L.txt");
+            fr2 = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\Puntuaciones.csv");
+            br2 = new BufferedReader(fr2);
+            puntuaciones = new HashMap<>();
+
+            String linea = null,nombre = null;
+            int puntuacion = 0;
+
+            while ((linea = br2.readLine()) != null){
+                lectorpalabras = new Scanner(linea);
+                lectorpalabras.useDelimiter(",");
+                while (lectorpalabras.hasNext()){
+                    nombre = lectorpalabras.next();
+                    puntuacion = lectorpalabras.nextInt();
+                    puntuaciones.put(nombre,puntuacion);
+                }
+            }
+        }catch (IOException e){
+            e.getMessage();
+        }catch (Exception e){
+            e.getMessage();
+        }finally {
+            try {
+                br2.close();
+                fr2.close();
+            }catch (IOException e){
+                e.getMessage();
+            }
+        }
+//      Cargar palabras en ArrayList
+        try {
+            fr = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\Palabras5L.txt");
             br = new BufferedReader(fr);
             listaNomOcultos = new ArrayList<>();
 
@@ -121,6 +185,8 @@ public class App {
                case 3:
 //              Llamada a listado de puntuaciones
 //                listarPuntuaciones();
+                   System.out.println(puntuaciones.get("Daniel"));
+
                    break;
                case 4:
 //              Salir del menu
