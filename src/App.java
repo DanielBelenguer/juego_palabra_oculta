@@ -15,14 +15,33 @@ public class App {
                  
                 """);
     }
-    static public void buscarPalabra (int contaPalabra) {
-        Random random = new Random(contaPalabra);
-
-
+    static public String buscarPalabra (ArrayList<String> listaNomOcultos,int contaPalabra) {
+        Random random = new Random();
+        int num = random.nextInt(contaPalabra);
+        String palabraOculta = listaNomOcultos.get(num);
+        return palabraOculta;
     }
-    static public void iniciarJuego() {
-//        Llamada de metodos para el inicio del juego
-//    buscarPalabra();
+    static public void iniciarJuego(ArrayList<String> listaNomOcultos, int contaPalabra,Scanner lector) {
+//  Generar la palabra oculta
+    String palabraOculta = buscarPalabra(listaNomOcultos,contaPalabra);
+//    Variables
+        ArrayList<String> listaIntentos = new ArrayList<>();
+        int contadorIntentos = 0;
+//  Comienzo de juego
+        System.out.println("Vamos a comenzar el juego. Escribe una palabra.");
+        while (contadorIntentos < 6){
+            System.out.println("Introduce una palabra de 5 letras");
+            String palabraIntento = lector.next();
+            if (palabraIntento.length() == 5){
+                
+                contadorIntentos++;
+            }else {
+                System.out.println("La palabra introducida no tiene 5 letras.");
+            }
+
+
+        }
+
     }
 
     public static void main(String[] args) {
@@ -80,7 +99,7 @@ public class App {
         switch (opt){
             case 1:
 //              Llamada a la función para iniciar un juego nuevo.
-                iniciarJuego();
+                iniciarJuego(listaNomOcultos,contaPalabra,lector);
                 break;
             case 2:
 //              Llamada para continuar un juego guardado
