@@ -3,7 +3,14 @@ import java.util.*;
 
 public class App {
     /*
+    * Antes de comenzar el juego introducir nombre de usuario y mirar si coincide en Puntuaciones.txt
     * posible opcion de menu: como jugar
+    *
+    * Ejemplo de colores
+    * public static final String GREEN = "\u001B[32m";
+    * public static final String YELLOW = "\u001B[33m";
+    * public static final String RESET_COLOR = "\u001B[0m";
+    *
     *
     * */
     static public void menu (){
@@ -34,8 +41,8 @@ public class App {
 //  Generar la palabra oculta
     String palabraOculta = buscarPalabra(listaNomOcultos);
 //  Variables
-        ArrayList<String> listaIntentos = new ArrayList<>();
-        ArrayList<String> listaIntentosPalabras = new ArrayList<>();
+        ArrayList<String> listaIntentos = new ArrayList<>(); //declarar de manera global
+        ArrayList<String> listaIntentosPalabras = new ArrayList<>();  //declarar de manera global
         int contadorIntentos = 6,puntuacion=0;
 
 //  Comienzo de juego
@@ -44,6 +51,17 @@ public class App {
         while (contadorIntentos > 0){
             System.out.println("Introduce una palabra de 5 letras");
             String palabraIntento = lector.next();
+            HashMap charpalabrabuscada = new HashMap();
+            HashMap charpalabraOculta = new HashMap();
+            for (int i = 0; i < 5; i++) {
+                charpalabrabuscada.put(i,palabraIntento.charAt(i));
+                charpalabraOculta.put(i,palabraOculta.charAt(i));
+            }
+
+            if(charpalabrabuscada.get(4).equals(charpalabraOculta.get(4))){
+
+            }
+
             System.out.println(palabraIntento);
             System.out.println(palabraOculta);
 
@@ -85,7 +103,7 @@ public class App {
                 case 2:
                     System.out.println("Vamos a guardar la partida");
                     System.out.println("Introduce el nombre para guardar la partida:");
-                    lector.nextLine();
+                    lector.nextLine(); //Vaciamos el buffer del lector
                     String nombreJuegoGuardado = lector.nextLine();
                     System.out.println(nombreJuegoGuardado);
                     JuegoGuardado guardado = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,listaIntentosPalabras,puntuacion);
@@ -98,8 +116,9 @@ public class App {
             }
         }
     }
+    /* ENUMERADO*/
     public static enum Colores {
-        VERDER,AMARILLO
+        VERDE,AMARILLO
     }
     public static void main(String[] args) {
         FileReader fr = null;
@@ -119,20 +138,20 @@ public class App {
 
 //      Cargar puntuaciones en HasMap
         try {
-            fr2 = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\Puntuaciones.csv");
+            fr2 = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/Puntuaciones.csv");
             br2 = new BufferedReader(fr2);
             puntuaciones = new HashMap<>();
 
             String linea = null,nombre = null;
-            int puntuacion = 0;
+            String puntuacion = null;
 
             while ((linea = br2.readLine()) != null){
                 lectorpalabras = new Scanner(linea);
                 lectorpalabras.useDelimiter(",");
                 while (lectorpalabras.hasNext()){
                     nombre = lectorpalabras.next();
-                    puntuacion = lectorpalabras.nextInt();
-                    puntuaciones.put(nombre,puntuacion);
+                    puntuacion = lectorpalabras.next();
+                    puntuaciones.put(nombre,nombre+" "+puntuacion);
                 }
             }
         }catch (IOException e){
@@ -149,7 +168,7 @@ public class App {
         }
 //      Cargar palabras en ArrayList
         try {
-            fr = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\Palabras5L.txt");
+            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/Palabras5L.txt");
             br = new BufferedReader(fr);
             listaNomOcultos = new ArrayList<>();
 
