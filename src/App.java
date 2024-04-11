@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class App {
@@ -10,24 +8,19 @@ public class App {
     * */
     static public void menu (){
         System.out.println("""
-                
                 1.- Nuevo Juego
                 2.- Cargar Juego
                 3.- Consultar puntuaciones
                 4.- Salir
                 
                 Elija una opción:
-                 
                 """);
     }
     static public void menuTurno (){
         System.out.println("""
-                
                 1.- Continuar
                 2.- Guardar juego
-                
                 Introduce 1 o 2:
-                
                 """);
     }
     static public String buscarPalabra (ArrayList<String> listaNomOcultos) {
@@ -42,30 +35,41 @@ public class App {
     String palabraOculta = buscarPalabra(listaNomOcultos);
 //  Variables
         ArrayList<String> listaIntentos = new ArrayList<>();
+        ArrayList<String> listaIntentosPalabras = new ArrayList<>();
         int contadorIntentos = 6,puntuacion=0;
+
 //  Comienzo de juego
         System.out.println("Vamos a comenzar el juego. Escribe una palabra.");
+
         while (contadorIntentos > 0){
             System.out.println("Introduce una palabra de 5 letras");
-                String palabraIntento = lector.next();
+            String palabraIntento = lector.next();
             System.out.println(palabraIntento);
             System.out.println(palabraOculta);
+
             if (palabraIntento.length() == 5){
+                listaIntentosPalabras.add(palabraIntento);
+
                 if (palabraIntento.equalsIgnoreCase(palabraOculta)){
                     System.out.println("ENHORABUENA! PALABRA ACERTADA");
                     puntuacion=puntuacion+(contadorIntentos*100);
                     System.out.println("Has obtenido un total de "+puntuacion+" puntos");
-                    contadorIntentos=6;
+                    contadorIntentos=6; // Reiniciamos el contador de los intentos
+                    listaIntentosPalabras.clear(); // Vaciar la ArrayList de las palabras intentadas
                     palabraOculta= buscarPalabra(listaNomOcultos);
                 }else {
                     contadorIntentos--;
                     System.out.println("Te quedan "+contadorIntentos+" intentos");
                 }
+
             }else {
                 System.out.println("La palabra introducida no tiene 5 letras.");
             }
+
             menuTurno();
+
             int opt = 0;
+
             try {
                 opt = lector.nextInt();
             }catch (InputMismatchException e){
@@ -73,25 +77,37 @@ public class App {
             }catch (Exception e){
                 e.getMessage();
             }
+
             switch (opt){
                 case 1:
                     System.out.println("Continuamos.....");
                     break;
                 case 2:
                     System.out.println("Vamos a guardar la partida");
+                    System.out.println("Introduce el nombre para guardar la partida:");
+                    lector.nextLine();
                     String nombreJuegoGuardado = lector.nextLine();
-//                    JuegoGuardado nombreJuegoGuardado = new JuegoGuardado();
+                    System.out.println(nombreJuegoGuardado);
+                    JuegoGuardado guardado = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,listaIntentosPalabras,puntuacion);
+//                  Implementar el guardado del juego
+//
+//
                     break;
                 default:
-
+                    System.out.println("Introduce una opcion valida 1 - 2");
             }
         }
+    }
+    public static enum Colores {
+        VERDER,AMARILLO
     }
     public static void main(String[] args) {
         FileReader fr = null;
         FileReader fr2 = null;
+        FileWriter fw = null;
         BufferedReader br = null;
         BufferedReader br2 = null;
+        FileWriter bw = null;
         Scanner lector = new Scanner(System.in);
         Scanner lectorpalabras = null;
         ArrayList<String> listaNomOcultos = null;
