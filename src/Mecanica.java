@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Mecanica {
@@ -26,7 +23,8 @@ public class Mecanica {
         BufferedReader br = null;
 
         try {
-            br = new BufferedReader(new FileReader("Puntuaciones.txt"));
+            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/archivosNecesarios/Puntuaciones.csv");
+            br = new BufferedReader(fr);
             puntuaciones = new HashMap<>();
 
             String linea = null,nombre = null;
@@ -54,16 +52,39 @@ public class Mecanica {
             }
         }
     }
+    public static void guardarPuntuaciones() {
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        try {
+            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/archivosNecesarios/Puntuaciones.csv");
+            br = new BufferedReader(fr);
+        }catch (IOException e) {
+            e.getMessage();
+        }finally {
+            try {
+                br.close();
+                fr.close();
+            }catch (IOException e) {
+                e.getMessage();
+            }
+        }
+
+
+
+
+
+
+    }
     public static void cargarPalabras(){
         FileReader fr = null;
         BufferedReader br = null;
 
         try {
-            br = new BufferedReader(new FileReader("Palabras5L.txt"));
+            fr = new FileReader("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/archivosNecesarios/Palabras.txt");
+            br = new BufferedReader(fr);
             palabrasOcultas = new ArrayList<>();
-
             String linea = null,palabra = null;
-
             while ((linea = br.readLine()) != null){
                 lectorpalabras = new Scanner(linea);
                 lectorpalabras.useDelimiter(",");
@@ -87,7 +108,7 @@ public class Mecanica {
         }
     }
     public static void instructions(){
-        File file = new File("Comosejuega.txt");
+        File file = new File("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/archivosNecesarios/Comosejuega.txt");
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -95,6 +116,51 @@ public class Mecanica {
             }
         } catch (Exception e) {
             System.out.println("error");
+        }
+    }
+    public static void guardarJuego(JuegoGuardado jue) {
+        FileOutputStream fo = null;
+        ObjectOutputStream os = null;
+
+        try {
+            fo = new FileOutputStream("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/partidasGuardadas");
+            os = new ObjectOutputStream(fo);
+
+            // Creamos el Objeto para guardarlo
+
+            os.writeObject(jue);
+
+        }catch (IOException e){
+            e.getMessage();
+        }finally {
+            try{
+                os.close();
+                fo.close();
+            }catch (IOException e){
+                e.getMessage();
+            }
+        }
+    }
+    public static void cargarJuego(String nombreJuego) {
+        FileInputStream fi = null;
+        ObjectInputStream is = null;
+
+        try {
+            fi = new FileInputStream("/home/daniel/Documentos/IdeaProjects/juego_palabra_oculta/src/partidasGuardadas" + nombreJuego + ".raton");
+            is = new ObjectInputStream(fi);
+
+            JuegoGuardado juegoGuardado = (JuegoGuardado) is.readObject();
+        }catch (IOException e) {
+            e.getMessage();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                is.close();
+                fi.close();
+            }catch (IOException e){
+                e.getMessage();
+            }
         }
     }
     static public void menu (){
@@ -130,7 +196,7 @@ public class Mecanica {
 //  Comienzo de juego
         System.out.println("Vamos a comenzar el juego. Escribe una palabra.");
 
-        while (contadorIntentos > INTENTOS ){
+        while (contadorIntentos < INTENTOS ){
             System.out.println("Introduce una palabra de 5 letras");
             String palabraIntento = lector.next();
             HashMap charpalabrabuscada = new HashMap();
@@ -157,10 +223,15 @@ public class Mecanica {
                     }else {
                         contadorIntentos--;
                         System.out.println("Te quedan "+contadorIntentos+" intentos");
+
                         // Comprobar letra por letra
-                        //
-                        //
-                        //
+
+//                        if (charpalabrabuscada.get(0).equals(charpalabraOculta.get(0))){
+//                            charpalabrabuscada.get(0);
+//                        }
+
+
+
 
                     }
 
@@ -194,11 +265,8 @@ public class Mecanica {
                     System.out.println("Introduce el nombre para guardar la partida:");
                     lector.nextLine(); //Vaciamos el buffer del lector
                     String nombreJuegoGuardado = lector.nextLine();
-                    System.out.println(nombreJuegoGuardado);
-                    JuegoGuardado guardado = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,listaIntentosPalabras,puntuacion);
-//                  Implementar el guardado del juego
-//
-//
+                    JuegoGuardado jue = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,listaIntentosPalabras,puntuacion);
+                    Mecanica.guardarJuego(jue);
                     break;
                 default:
                     System.out.println("Introduce una opcion valida 1 - 2");

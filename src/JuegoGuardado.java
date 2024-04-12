@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 // Tenemos que ver como se hace para guardar objetos de esta clase dentro de un archivo Binario
-public class JuegoGuardado {
+public class JuegoGuardado implements Serializable {
     private String nombreJuegoGuardado;
     private String palabraSecreta;
     private int vidasNoGastadas, puntuacion;
@@ -14,5 +15,4 @@ public class JuegoGuardado {
         this.listaIntentosPalabras = listaIntentosPalabras;
         this.puntuacion=puntuacion;
     }
-
 }

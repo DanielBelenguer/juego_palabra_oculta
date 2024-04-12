@@ -50,7 +50,8 @@ public class App {
                case 4:
 //                  Llamada a listado de puntuaciones
                    System.out.println("Esta es la lista de puntuaciones.");
-                   Mecanica.puntuaciones.get("Daniel");
+                   System.out.println(Mecanica.puntuaciones.values());
+
                    break;
                case 5:
 //              Salir del menu
