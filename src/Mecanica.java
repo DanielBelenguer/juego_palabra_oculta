@@ -14,8 +14,7 @@ public class Mecanica {
     public static ArrayList<String> palabrasOcultas = new ArrayList<>();
     public static ArrayList<String> listaIntentosPalabras = new ArrayList<>();
     public static HashMap puntuaciones = new HashMap<>();
-
-    private static final int INTENTOS = 6;
+//   private static final int INTENTOS = 6;
 
 
     public static void cargarPuntuacion (){
@@ -196,22 +195,34 @@ public class Mecanica {
 //  Comienzo de juego
         System.out.println("Vamos a comenzar el juego. Escribe una palabra.");
 
-        while (contadorIntentos < INTENTOS ){
+        while (contadorIntentos <= 6 ){
             System.out.println("Introduce una palabra de 5 letras");
             String palabraIntento = lector.next();
-            HashMap charpalabrabuscada = new HashMap();
-            HashMap charpalabraOculta = new HashMap();
+
+            ArrayList<Character> charpalabrabuscada = new ArrayList<>();
+            ArrayList<Character> charpalabraOculta = new ArrayList<>();
 
             for (int i = 0; i < 5; i++) {
-                charpalabrabuscada.put(i,palabraIntento.charAt(i));
-                charpalabraOculta.put(i,palabraOculta.charAt(i));
+                charpalabrabuscada.add(palabraIntento.charAt(i));
+                charpalabraOculta.add(palabraOculta.charAt(i));
             }
 
             // Comprobar que la palabra introducida tiene 5 letras
             if (palabraIntento.length() == 5){
                 // Comprobar que existe la palabra
-                if (listaIntentosPalabras.contains(palabraIntento)) {
+                if (palabrasOcultas.contains(palabraIntento)) {
                     listaIntentosPalabras.add(palabraIntento);
+
+                    for (int i = 0; i < 5; i++) {
+                        if (palabraIntento.charAt(i) == palabraOculta.charAt(i)){
+                            System.out.println("La letra " + palabraOculta.charAt(i) +" Esta en la posicion correcta");
+                        } else if (charpalabraOculta.contains(charpalabrabuscada.get(i))) {
+                            System.out.println("La letra "+ charpalabrabuscada.get(i)+" si esta en la palabra");
+                        }else {
+                            System.out.println("La letra "+ charpalabrabuscada.get(i)+ " No esta en la palabra");
+                        }
+                    }
+
 
                     if (palabraIntento.equalsIgnoreCase(palabraOculta)){
                         System.out.println("ENHORABUENA! PALABRA ACERTADA");
@@ -220,20 +231,13 @@ public class Mecanica {
                         contadorIntentos=0; // Reiniciamos el contador de los intentos
                         listaIntentosPalabras.clear(); // Vaciar la ArrayList de las palabras intentadas
                         palabraOculta = Mecanica.buscarPalabra();
+
                     }else {
-                        contadorIntentos--;
+                        contadorIntentos++;
                         System.out.println("Te quedan "+contadorIntentos+" intentos");
 
-                        // Comprobar letra por letra
-
-//                        if (charpalabrabuscada.get(0).equals(charpalabraOculta.get(0))){
-//                            charpalabrabuscada.get(0);
-//                        }
-
-
-
-
                     }
+
 
                 }else {
 //                  Como la palabra no existe en el archivo..... vamos por aquí
