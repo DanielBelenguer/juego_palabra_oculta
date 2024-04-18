@@ -3,8 +3,17 @@ import java.util.*;
 
 public class App {
     /*
-    * Antes de comenzar el juego introducir nombre de usuario y mirar si coincide en Puntuaciones.txt
-    * posible opcion de menu: como jugar
+    *
+    * Tareas:
+    * - Preguntar tema guardado hasta que no sales no se guarda
+    * - Preguntar tema de rutas relativas
+    * - Escribir documento de como jugar
+    * - Implementar recoger puntuaciones para registrarlas
+    * - Implementar colores
+    * - Comprobar hasMap de puntuaciones
+    *
+    *
+    *
     *
     * Ejemplo de colores
     * public static final String GREEN = "\u001B[32m";
@@ -35,7 +44,8 @@ public class App {
            }
            switch (opt){
                case 1:
-//
+//                  Llamada a como se juega
+                   Mecanica.comoSeJuega();
                    break;
                case 2:
 //                  Llamada a la función para iniciar un juego nuevo.
@@ -43,12 +53,15 @@ public class App {
 
                    break;
                case 3:
+
 //                  Llamada para continuar un juego guardado
-//                  cargarJuego();
+                   System.out.println("¿Que juego quieres cargar?");
+                   String nombrejuego = Mecanica.lector.next();
+                   Mecanica.cargarJuego(nombrejuego);
 
                    break;
                case 4:
-//                  Llamada a listado de puntuaciones
+//                  Llamada al listado de puntuaciones
                    System.out.println("Esta es la lista de puntuaciones.");
                    System.out.println(Mecanica.puntuaciones.values());
 

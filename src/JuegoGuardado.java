@@ -5,14 +5,35 @@ import java.util.ArrayList;
 public class JuegoGuardado implements Serializable {
     private String nombreJuegoGuardado;
     private String palabraSecreta;
-    private int vidasNoGastadas, puntuacion;
-    private ArrayList<String> listaIntentosPalabras;
+    private int intentos, puntuacion;
+    private ArrayList<String> palabrasIntentadas;
 
-    JuegoGuardado(String nombreJuegoGuardado,String palabraSecreta, int vidasNoGastadas,ArrayList listaIntentosPalabras,int puntuacion) {
+
+    JuegoGuardado(String nombreJuegoGuardado,String palabraSecreta, int intentos,ArrayList palabrasIntentadas,int puntuacion) {
         this.nombreJuegoGuardado=nombreJuegoGuardado;
         this.palabraSecreta = palabraSecreta;
-        this.vidasNoGastadas = vidasNoGastadas;
-        this.listaIntentosPalabras = listaIntentosPalabras;
+        this.intentos = intentos;
+        this.palabrasIntentadas = palabrasIntentadas;
         this.puntuacion=puntuacion;
+    }
+
+    public String getNombreJuegoGuardado() {
+        return nombreJuegoGuardado;
+    }
+
+    public String getPalabraSecreta() {
+        return palabraSecreta;
+    }
+
+    public int getIntentos() {
+        return intentos;
+    }
+
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
+    public ArrayList<String> getpalabrasIntentadas() {
+        return palabrasIntentadas;
     }
 }
