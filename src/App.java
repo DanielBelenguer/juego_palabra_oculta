@@ -50,24 +50,20 @@ public class App {
                case 2:
 //                  Llamada a la función para iniciar un juego nuevo.
                    Mecanica.iniciarJuego();
-
                    break;
                case 3:
-
 //                  Llamada para continuar un juego guardado
                    System.out.println("¿Que juego quieres cargar?");
                    String nombrejuego = Mecanica.lector.next();
                    Mecanica.cargarJuego(nombrejuego);
-
                    break;
                case 4:
 //                  Llamada al listado de puntuaciones
                    System.out.println("Esta es la lista de puntuaciones.");
-                   System.out.println(Mecanica.puntuaciones.values());
-
+                   System.out.println(Mecanica.puntuaciones.entrySet());
                    break;
                case 5:
-//              Salir del menu
+//                 Salir del menu
                    System.out.println("Saliendo del juego");
                    salirjuego = true;
                    break;
@@ -75,5 +71,6 @@ public class App {
                    System.out.println("elija una opción válida");
            }
        }
+       Mecanica.guardarPuntuaciones();
     }
 }

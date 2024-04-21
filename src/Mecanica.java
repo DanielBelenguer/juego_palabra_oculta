@@ -12,8 +12,10 @@ public class Mecanica {
     public static Scanner lector = new Scanner(System.in);
     public static ArrayList<String> palabrasOcultas = new ArrayList<>();
     public static ArrayList<String> listaIntentosPalabras = new ArrayList<>();
-    public static HashMap puntuaciones = new HashMap<>();
+    public static HashMap<String,Integer> puntuaciones = new HashMap<>();
    private static final int INTENTOS = 6;
+   private static int puntuacion = 0;
+
 
 
     public static void cargarPuntuacion (){
@@ -21,20 +23,21 @@ public class Mecanica {
         BufferedReader br = null;
 
         try {
-            fr = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\archivosNecesarios\\Puntuaciones.csv");
+            fr = new FileReader("src\\archivosNecesarios\\Puntuaciones.csv");
             br = new BufferedReader(fr);
             puntuaciones = new HashMap<>();
 
             String linea = null,nombre = null;
-            String puntuacion = null;
+            int puntuacion;
 
             while ((linea = br.readLine()) != null){
                 lectorpalabras = new Scanner(linea);
                 lectorpalabras.useDelimiter(",");
                 while (lectorpalabras.hasNext()){
                     nombre = lectorpalabras.next();
-                    puntuacion = lectorpalabras.next();
-                    puntuaciones.put(nombre,nombre+" "+puntuacion);
+                    // Hacemos la conversion de un String que recibimos del lector a un integer
+                    puntuacion = Integer.parseInt(lectorpalabras.next());
+                    puntuaciones.put(nombre,puntuacion);
                 }
             }
         }catch (IOException e){
@@ -51,18 +54,29 @@ public class Mecanica {
         }
     }
     public static void guardarPuntuaciones() {
-        FileReader fr = null;
-        BufferedReader br = null;
+        FileWriter fw = null;
+        BufferedWriter bw = null;
 
         try {
-            fr = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\archivosNecesarios\\Puntuaciones.csv");
-            br = new BufferedReader(fr);
+            fw = new FileWriter("src\\archivosNecesarios\\Puntuaciones.csv");
+            bw = new BufferedWriter(fw);
+
+            for (Map.Entry<String, Integer> en : puntuaciones.entrySet()) {
+                String nombre = en.getKey();
+                int puntu = (int) en.getValue();
+
+                bw.write(nombre);
+                bw.write(",");
+                bw.write(String.valueOf(puntu));
+                bw.newLine();
+            }
+
         }catch (IOException e) {
             e.getMessage();
         }finally {
             try {
-                br.close();
-                fr.close();
+                bw.close();
+                fw.close();
             }catch (IOException e) {
                 e.getMessage();
             }
@@ -73,7 +87,7 @@ public class Mecanica {
         BufferedReader br = null;
 
         try {
-            fr = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\archivosNecesarios\\Palabras.txt");
+            fr = new FileReader("src\\archivosNecesarios\\Palabras.txt");
             br = new BufferedReader(fr);
             palabrasOcultas = new ArrayList<>();
             String linea = null,palabra = null;
@@ -103,7 +117,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try{
-            fr = new FileReader("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\archivosNecesarios\\Comosejuega.txt");
+            fr = new FileReader("src\\archivosNecesarios\\Comosejuega.txt");
             br = new BufferedReader(fr);
             String line;
             while ((line = br.readLine()) != null) {
@@ -131,12 +145,12 @@ public class Mecanica {
         * guardar passs en la clase juegoGuardado*/
         FileOutputStream fo = null;
         ObjectOutputStream os = null;
-
         try {
-            fo = new FileOutputStream("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\partidasGuardadas\\"+ jue.getNombreJuegoGuardado() +".bin");
+            fo = new FileOutputStream("src\\partidasGuardadas\\"+ jue.getNombreJuegoGuardado() +".bin");
             os = new ObjectOutputStream(fo);
 
             os.writeObject(jue);
+            os.flush();
             System.out.println("Escritura finalizada");
 
         }catch (IOException e){
@@ -155,36 +169,42 @@ public class Mecanica {
         ObjectInputStream is = null;
 
         try {
-            fi = new FileInputStream("C:\\Users\\danie\\Documents\\DAW\\java\\juego_palabra_oculta\\src\\partidasGuardadas\\" + nombreJuego + ".bin");
+            fi = new FileInputStream("src\\partidasGuardadas\\" + nombreJuego + ".bin");
             is = new ObjectInputStream(fi);
 
             JuegoGuardado juegoGuardado= (JuegoGuardado) is.readObject();;
 
 //            Iniciar juego cargado
 
-
             //      Declaracion de variables Internas de CargarJuedo
             String palabraOculta = juegoGuardado.getPalabraSecreta();
             int contadorIntentos = juegoGuardado.getIntentos(), puntuacion=juegoGuardado.getPuntuacion();
             ArrayList<String> palabrasIntentadas = juegoGuardado.getpalabrasIntentadas();
 
-//  Comienzo de juego
             System.out.println("Vamos a continuar el juego.");
+            System.out.println("Pon una puntuacion de: " + puntuacion);
             System.out.println("Tienes estas palabras como intentos: ");
 
             while (contadorIntentos < INTENTOS ){
-                System.out.println(palabrasIntentadas.toString());
+                if (!palabrasIntentadas.isEmpty()){
+                    System.out.println(palabrasIntentadas.toString());
+                }else {
+                    System.out.println(" ");
+                }
+
                 System.out.println("Introduce una palabra de 5 letras");
                 String palabraIntento = lector.next();
 
                 ArrayList<Character> charpalabrabuscada = new ArrayList<>();
                 ArrayList<Character> charpalabraOculta = new ArrayList<>();
 
-                for (int i = 0; i < 5; i++) {
-
-//               Controlar entrada que sea 5 letras no menos-----------------------------------------------------------------------------------------------------
-                    charpalabrabuscada.add(palabraIntento.charAt(i));
-                    charpalabraOculta.add(palabraOculta.charAt(i));
+                try{
+                    for (int i = 0; i < 5; i++) {
+                        charpalabrabuscada.add(palabraIntento.charAt(i));
+                        charpalabraOculta.add(palabraOculta.charAt(i));
+                    }
+                }catch (StringIndexOutOfBoundsException e){
+                    e.getMessage();
                 }
 
                 // Comprobar que la palabra introducida tiene 5 letras
@@ -192,16 +212,16 @@ public class Mecanica {
                     // Comprobar que existe la palabra
                     if (palabrasOcultas.contains(palabraIntento)) {
                         palabrasIntentadas.add(palabraIntento);
-
                         for (int i = 0; i < 5; i++) {
                             if (palabraIntento.charAt(i) == palabraOculta.charAt(i)){
-                                System.out.println("La letra " + palabraOculta.charAt(i) +" Esta en la posicion correcta");
+                                System.out.print(" " + GREEN_COLOR + palabraOculta.charAt(i)+ RESET); // Correcta
                             } else if (charpalabraOculta.contains(charpalabrabuscada.get(i))) {
-                                System.out.println("La letra "+ charpalabrabuscada.get(i)+" si esta en la palabra");
+                                System.out.print(" "+ YELLOW_COLOR + charpalabrabuscada.get(i)+ RESET); // Esta pero no posición
                             }else {
-                                System.out.println("La letra "+ charpalabrabuscada.get(i)+ " No esta en la palabra");
+                                System.out.print(" " + charpalabrabuscada.get(i)); // no pintar
                             }
                         }
+                        System.out.println();
 
                         if (palabraIntento.equalsIgnoreCase(palabraOculta)){
                             System.out.println("ENHORABUENA! PALABRA ACERTADA");
@@ -214,9 +234,7 @@ public class Mecanica {
                         }else {
                             contadorIntentos++;
                             System.out.println("Llevas: "+contadorIntentos+" Intentos de 6");
-
                         }
-
                     }else {
 //                  Como la palabra no existe en el archivo..... vamos por aquí
                         System.out.println("La palabra introducida no existe en la base de datos......");
@@ -225,34 +243,73 @@ public class Mecanica {
                     // Como la palabra no tiene 5 letras, pues damos este mensaje.
                     System.out.println("La palabra introducida no es de 5 letras.... Introduce otra!!");
                 }
+                if (contadorIntentos == INTENTOS){
+                    System.out.println("Has perdido la partida!!\ncon un total de: \n"+ puntuacion + " Puntos");
+                    int opt = 0;
 
-                menuTurno();
+                    try {
+                        System.out.println("""
+                        ¿Quieres guardar tu puntuación?
+                        1.- Si
+                        2.- No
+                        """);
+                        opt = lector.nextInt();
+                    }catch (InputMismatchException e){
+                        e.getMessage();
+                    }
+                    lector.nextLine();
+                    switch (opt){
+                        case 1:
+                            System.out.println("¿Con que nombre quieres guardar tu puntuación");
+                            String nombre = lector.nextLine();
+                            if (puntuaciones.containsKey(nombre) && puntuaciones.get(nombre) < puntuacion){
+                                puntuaciones.put(nombre,puntuacion);
+                                System.out.println("Puntuación actualizada");
 
-                int opt = 0;
+                            } else if (puntuaciones.containsKey(nombre)) {
+                                System.out.println("El nombre introducido ya existe.");
+                            }else {
+                                puntuaciones.put(nombre,puntuacion);
+                                System.out.println("Puntuación registrada");
+                            }
+                            break;
+                        case 2:
+                            System.out.println("Saliendo al menu");
+                            break;
+                        default:
+                            System.out.println("Introduce una opción correcta.");
+                    }
 
-                try {
-                    opt = lector.nextInt();
-                }catch (InputMismatchException e){
-                    e.getMessage();
-                }catch (Exception e){
-                    e.getMessage();
-                }
+                }else {
 
-                switch (opt){
-                    case 1:
-                        System.out.println("Continuamos.....");
-                        break;
-                    case 2:
-                        System.out.println("Vamos a guardar la partida");
-                        System.out.println("Introduce el nombre para guardar la partida:");
-                        lector.nextLine(); //Vaciamos el buffer del lector
-                        String nombreJuegoGuardado = lector.nextLine();
-                        JuegoGuardado jue = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,palabrasIntentadas,puntuacion);
-                        Mecanica.guardarJuego(jue);
-                        contadorIntentos=6;
-                        break;
-                    default:
-                        System.out.println("Introduce una opción válida 1 - 2");
+                    menuTurno();
+
+                    int opt = 0;
+
+                    try {
+                        opt = lector.nextInt();
+                    }catch (InputMismatchException e){
+                        e.getMessage();
+                    }catch (Exception e){
+                        e.getMessage();
+                    }
+
+                    switch (opt){
+                        case 1:
+                            System.out.println("Continuamos.....");
+                            break;
+                        case 2:
+                            System.out.println("Vamos a guardar la partida");
+                            System.out.println("Introduce el nombre para guardar la partida:");
+                            lector.nextLine(); //Vaciamos el buffer del lector
+                            String nombreJuegoGuardado = lector.nextLine();
+                            JuegoGuardado jue = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,palabrasIntentadas,puntuacion);
+                            Mecanica.guardarJuego(jue);
+                            contadorIntentos=6;
+                            break;
+                        default:
+                            System.out.println("Introduce una opcion valida 1 - 2");
+                    }
                 }
             }
         }catch (IOException e) {
@@ -290,32 +347,43 @@ public class Mecanica {
         Random random = new Random();
         int num = random.nextInt(palabrasOcultas.size());
         String palabraOculta = palabrasOcultas.get(num);
-        System.out.println(palabraOculta); // Esto solo es para la pruebas, no debe mostrarse.
+        System.out.println(palabraOculta); // Esto solo es para las pruebas, no debe mostrarse.-------------------------
         return palabraOculta;
     }
     static public void iniciarJuego() {
-//      Declaracion de variables Internas de IniciarJuego
+//      Declaración de variables Internas de IniciarJuego
         String palabraOculta = Mecanica.buscarPalabra();
-        int contadorIntentos = 0,puntuacion=0;
+        int contadorIntentos = 0;
         ArrayList<String> palabrasIntentadas = new ArrayList<>();
 
 //  Comienzo de juego
         System.out.println("Vamos a iniciar el juego.");
 
         while (contadorIntentos < INTENTOS ){
-            System.out.println(palabrasIntentadas.toString());
+            if (!palabrasIntentadas.isEmpty()){
+                System.out.println(palabrasIntentadas.toString());
+            }else {
+                System.out.println(" ");
+            }
+
+
             System.out.println("Introduce una palabra de 5 letras");
             String palabraIntento = lector.next();
 
             ArrayList<Character> charpalabrabuscada = new ArrayList<>();
             ArrayList<Character> charpalabraOculta = new ArrayList<>();
 
-            for (int i = 0; i < 5; i++) {
-
-//               Controlar entrada que sea 5 letras no menos-----------------------------------------------------------------------------------------------------
-                charpalabrabuscada.add(palabraIntento.charAt(i));
-                charpalabraOculta.add(palabraOculta.charAt(i));
+            try{
+                for (int i = 0; i < 5; i++) {
+                    charpalabrabuscada.add(palabraIntento.charAt(i));
+                    charpalabraOculta.add(palabraOculta.charAt(i));
+                }
+            }catch (StringIndexOutOfBoundsException e){
+                e.getMessage();
             }
+
+
+
 
             // Comprobar que la palabra introducida tiene 5 letras
             if (palabraIntento.length() == 5){
@@ -324,13 +392,15 @@ public class Mecanica {
                     palabrasIntentadas.add(palabraIntento);
                     for (int i = 0; i < 5; i++) {
                         if (palabraIntento.charAt(i) == palabraOculta.charAt(i)){
-                            System.out.println("La letra " + palabraOculta.charAt(i) +" Esta en la posicion correcta");
+                            System.out.print(" " + GREEN_COLOR + palabraOculta.charAt(i)+ RESET); // Correcta
                         } else if (charpalabraOculta.contains(charpalabrabuscada.get(i))) {
-                            System.out.println("La letra "+ charpalabrabuscada.get(i)+" si esta en la palabra");
+                            System.out.print(" "+ YELLOW_COLOR + charpalabrabuscada.get(i)+ RESET); // Esta pero no posición
                         }else {
-                            System.out.println("La letra "+ charpalabrabuscada.get(i)+ " No esta en la palabra");
+                            System.out.print(" " + charpalabrabuscada.get(i)); // no pintar
                         }
                     }
+                    System.out.println();
+
 
                     if (palabraIntento.equalsIgnoreCase(palabraOculta)){
                         System.out.println("ENHORABUENA! PALABRA ACERTADA");
@@ -355,34 +425,82 @@ public class Mecanica {
                 System.out.println("La palabra introducida no es de 5 letras.... Introduce otra!!");
             }
 
-            menuTurno();
+            if (contadorIntentos == INTENTOS){
+                System.out.println("Has perdido la partida!!\ncon un total de: \n"+ puntuacion + " Puntos");
+                int opt = 0;
 
-            int opt = 0;
+                try {
+                    System.out.println("""
+                        ¿Quieres guardar tu puntuación?
+                        1.- Si
+                        2.- No
+                        """);
+                    opt = lector.nextInt();
+                }catch (InputMismatchException e){
+                    e.getMessage();
+                }
+                lector.nextLine();
+                switch (opt){
+                    case 1:
+                        boolean control = true;
+                        while (control){
+                            System.out.println("¿Con que nombre quieres guardar tu puntuación");
+                            String nombre = lector.nextLine();
+                            if (puntuaciones.containsKey(nombre) && puntuaciones.get(nombre) < puntuacion){
+                                puntuaciones.put(nombre,puntuacion);
+                                control = false;
+                                System.out.println("Puntuación actualizada");
 
-            try {
-                opt = lector.nextInt();
-            }catch (InputMismatchException e){
-                e.getMessage();
-            }catch (Exception e){
-                e.getMessage();
+                            } else if (puntuaciones.containsKey(nombre)) {
+                                control = true;
+                                System.out.println("El nombre introducido ya existe.");
+                            }else {
+                                puntuaciones.put(nombre,puntuacion);
+                                control = false;
+                                System.out.println("Puntuación registrada");
+                            }
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Saliendo al menu");
+                        break;
+                    default:
+                        System.out.println("Introduce una opción correcta.");
+                }
+
+            }else {
+
+                menuTurno();
+
+                int opt = 0;
+
+                try {
+                    opt = lector.nextInt();
+                }catch (InputMismatchException e){
+                    e.getMessage();
+                }catch (Exception e){
+                    e.getMessage();
+                }
+
+                switch (opt){
+                    case 1:
+                        System.out.println("Continuamos.....");
+                        break;
+                    case 2:
+                        System.out.println("Vamos a guardar la partida");
+                        System.out.println("Introduce el nombre para guardar la partida:");
+                        lector.nextLine(); //Vaciamos el buffer del lector
+                        String nombreJuegoGuardado = lector.nextLine();
+                        JuegoGuardado jue = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,palabrasIntentadas,puntuacion);
+                        Mecanica.guardarJuego(jue);
+                        contadorIntentos=6;
+                        break;
+                    default:
+                        System.out.println("Introduce una opcion valida 1 - 2");
+                }
             }
 
-            switch (opt){
-                case 1:
-                    System.out.println("Continuamos.....");
-                    break;
-                case 2:
-                    System.out.println("Vamos a guardar la partida");
-                    System.out.println("Introduce el nombre para guardar la partida:");
-                    lector.nextLine(); //Vaciamos el buffer del lector
-                    String nombreJuegoGuardado = lector.nextLine();
-                    JuegoGuardado jue = new JuegoGuardado(nombreJuegoGuardado,palabraOculta,contadorIntentos,palabrasIntentadas,puntuacion);
-                    Mecanica.guardarJuego(jue);
-                    contadorIntentos=6;
-                    break;
-                default:
-                    System.out.println("Introduce una opcion valida 1 - 2");
-            }
+
         }
     }
 
