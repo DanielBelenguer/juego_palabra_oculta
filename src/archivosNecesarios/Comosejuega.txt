@@ -1,0 +1,12 @@
+¿Cómo se juega?
+
+- El juego selecciona una palabra aleatoria de cinco letras.
+- Tienes seis intentos para adivinar la palabra correcta.
+- Después de cada intento, el juego te dará pistas sobre las letras que has acertado y si están
+  en la posición correcta o no.
+- Las letras en verde indican que has seleccionado la letra correcta en la posición correcta, las
+  letras amarillas indican que has seleccionado la letra correcta pero en la posición incorrecta, y
+  las letras grises indican que esa letra no está en la palabra seleccionada.
+- Con estas pistas, debes usar la lógica y el razonamiento para adivinar la palabra correcta antes
+  de que se te acaben los intentos.
+

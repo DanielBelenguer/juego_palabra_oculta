@@ -4,22 +4,6 @@ import java.util.*;
 public class App {
     /*
     *
-    * Tareas:
-    * - Preguntar tema guardado hasta que no sales no se guarda
-    * - Preguntar tema de rutas relativas
-    * - Escribir documento de como jugar
-    * - Implementar recoger puntuaciones para registrarlas
-    * - Implementar colores
-    * - Comprobar hasMap de puntuaciones
-    *
-    *
-    *
-    *
-    * Ejemplo de colores
-    * public static final String GREEN = "\u001B[32m";
-    * public static final String YELLOW = "\u001B[33m";
-    * public static final String RESET_COLOR = "\u001B[0m";
-    *
     *
     * */
 
