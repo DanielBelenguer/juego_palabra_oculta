@@ -12,7 +12,6 @@ public class Mecanica {
    private static Scanner lectorpalabras = null;
    public static Scanner lector = new Scanner(System.in);
    public static ArrayList<String> palabrasOcultas = new ArrayList<>();
-   public static ArrayList<String> listaIntentosPalabras = new ArrayList<>(); // No se utiliza nunca
    public static HashMap<String,Integer> puntuaciones = new HashMap<>();
    private static final int INTENTOS = 6;
    private static int puntuacion = 0;
@@ -20,7 +19,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            fr = new FileReader("src\\archivosNecesarios\\Puntuaciones.csv");
+            fr = new FileReader("src/archivosNecesarios/Puntuaciones.csv");
             br = new BufferedReader(fr);
             puntuaciones = new HashMap<>();
             String linea = null,nombre = null;
@@ -52,7 +51,7 @@ public class Mecanica {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter("src\\archivosNecesarios\\Puntuaciones.csv");
+            fw = new FileWriter("src/archivosNecesarios/Puntuaciones.csv");
             bw = new BufferedWriter(fw);
             for (Map.Entry<String, Integer> en : puntuaciones.entrySet()) {
                 String nombre = en.getKey();
@@ -77,7 +76,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            fr = new FileReader("src\\archivosNecesarios\\Palabras.txt");
+            fr = new FileReader("src/archivosNecesarios/Palabras.txt");
             br = new BufferedReader(fr);
             palabrasOcultas = new ArrayList<>();
             String linea = null,palabra = null;
@@ -107,7 +106,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try{
-            fr = new FileReader("src\\archivosNecesarios\\Comosejuega.txt");
+            fr = new FileReader("src/archivosNecesarios/Comosejuega.txt");
             br = new BufferedReader(fr);
             String line;
             while ((line = br.readLine()) != null) {
@@ -132,7 +131,7 @@ public class Mecanica {
         FileOutputStream fo = null;
         ObjectOutputStream os = null;
         try {
-            fo = new FileOutputStream("src\\partidasGuardadas\\"+ jue.getNombreJuegoGuardado() +".bin");
+            fo = new FileOutputStream("src/partidasGuardadas/"+ jue.getNombreJuegoGuardado() +".bin");
             os = new ObjectOutputStream(fo);
             os.writeObject(jue);
             os.flush();
@@ -153,9 +152,9 @@ public class Mecanica {
         FileInputStream fi = null;
         ObjectInputStream is = null;
         try {
-            fi = new FileInputStream("src\\partidasGuardadas\\" + nombreJuego + ".bin");
+            fi = new FileInputStream("src/partidasGuardadas/" + nombreJuego + ".bin");
             is = new ObjectInputStream(fi);
-            JuegoGuardado juegoGuardado= (JuegoGuardado) is.readObject();;
+            JuegoGuardado juegoGuardado = (JuegoGuardado) is.readObject();;
 //            Iniciar juego cargado
             //      Declaracion de variables Internas de CargarJuedo
             String palabraOculta = juegoGuardado.getPalabraSecreta();
@@ -166,7 +165,7 @@ public class Mecanica {
             System.out.println("Tienes estas palabras como intentos: ");
             while (contadorIntentos < INTENTOS ){
                 if (!palabrasIntentadas.isEmpty()){
-                    System.out.println(palabrasIntentadas.toString());
+                    System.out.println("Estas palabras fueron intentadas: " + palabrasIntentadas.toString());
                 }else {
                     System.out.println(" ");
                 }
@@ -186,16 +185,23 @@ public class Mecanica {
                 if (palabraIntento.length() == 5){
                     // Comprobar que existe la palabra
                     if (palabrasOcultas.contains(palabraIntento)) {
-                        palabrasIntentadas.add(palabraIntento);
+                        String palabracolor = "";
                         for (int i = 0; i < 5; i++) {
-                            if (palabraIntento.charAt(i) == palabraOculta.charAt(i)){
-                                System.out.print(" " + GREEN_COLOR + palabraOculta.charAt(i)+ RESET); // Correcta
+                            if (palabraIntento.charAt(i) == palabraOculta.charAt(i)) {
+                                palabracolor = palabracolor + " " + GREEN_COLOR + palabraIntento.charAt(i) + RESET;
+                                System.out.print(" " + GREEN_COLOR + palabraIntento.charAt(i) + RESET); // Correcta
+
                             } else if (charpalabraOculta.contains(charpalabrabuscada.get(i))) {
-                                System.out.print(" "+ YELLOW_COLOR + charpalabrabuscada.get(i)+ RESET); // Esta pero no posición
-                            }else {
+                                palabracolor = palabracolor + " " + YELLOW_COLOR + palabraIntento.charAt(i) + RESET;
+                                System.out.print(" " + YELLOW_COLOR + palabraIntento.charAt(i) + RESET); // Esta pero no posición
+
+                            } else {
                                 System.out.print(" " + charpalabrabuscada.get(i)); // no pintar
+                                palabracolor = palabracolor + " " + palabraIntento.charAt(i);
                             }
                         }
+                        palabrasIntentadas.add(palabracolor);
+
                         System.out.println();
                         if (palabraIntento.equalsIgnoreCase(palabraOculta)){
                             System.out.println(BLUE_COLOR + "ENHORABUENA! PALABRA ACERTADA" + RESET);
@@ -327,12 +333,12 @@ public class Mecanica {
         System.out.println("Vamos a iniciar el juego.");
         while (contadorIntentos < INTENTOS ){
             if (!palabrasIntentadas.isEmpty()){
-                System.out.println(palabrasIntentadas.toString());
+                System.out.println("Estas palabras fueron intentadas: " + palabrasIntentadas.toString());
             }else {
                 System.out.println(" ");
             }
             System.out.println("Introduce una palabra de 5 letras");
-            String palabraIntento = lector.next();
+            String palabraIntento = lector.next().toLowerCase();
             ArrayList<Character> charpalabrabuscada = new ArrayList<>();
             ArrayList<Character> charpalabraOculta = new ArrayList<>();
             try{
@@ -347,16 +353,22 @@ public class Mecanica {
             if (palabraIntento.length() == 5){
                 // Comprobar que existe la palabra
                 if (palabrasOcultas.contains(palabraIntento)) {
-                    palabrasIntentadas.add(palabraIntento);
+                    String palabracolor = "";
                     for (int i = 0; i < 5; i++) {
-                        if (palabraIntento.charAt(i) == palabraOculta.charAt(i)){
-                            System.out.print(" " + GREEN_COLOR + palabraOculta.charAt(i)+ RESET); // Correcta
+                        if (palabraIntento.charAt(i) == palabraOculta.charAt(i)) {
+                            palabracolor = palabracolor+ " " + GREEN_COLOR + palabraIntento.charAt(i) + RESET;
+                            System.out.print(" " + GREEN_COLOR + palabraIntento.charAt(i) + RESET); // Correcta
+
                         } else if (charpalabraOculta.contains(charpalabrabuscada.get(i))) {
-                            System.out.print(" "+ YELLOW_COLOR + charpalabrabuscada.get(i)+ RESET); // Esta pero no posición
-                        }else {
+                            palabracolor = palabracolor+ " " + YELLOW_COLOR + palabraIntento.charAt(i) + RESET;
+                            System.out.print(" " + YELLOW_COLOR + palabraIntento.charAt(i) + RESET); // Esta pero no posición
+
+                        } else {
                             System.out.print(" " + charpalabrabuscada.get(i)); // no pintar
+                            palabracolor = palabracolor + " " + palabraIntento.charAt(i);
                         }
                     }
+                    palabrasIntentadas.add(palabracolor);
                     System.out.println();
                     if (palabraIntento.equalsIgnoreCase(palabraOculta)){
                         System.out.println("ENHORABUENA! PALABRA ACERTADA");
@@ -423,9 +435,7 @@ public class Mecanica {
                 }
             }else {
                 menuTurno();
-
                 int opt = 0;
-
                 try {
                     opt = lector.nextInt();
                 }catch (InputMismatchException e){
