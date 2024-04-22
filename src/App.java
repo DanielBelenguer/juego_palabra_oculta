@@ -2,20 +2,13 @@ import java.io.*;
 import java.util.*;
 
 public class App {
-    /*
-    *
-    *
-    * */
-
     public static void main(String[] args) {
 //        Cargamos las palabras y las puntuaciones en el juego
         Mecanica.cargarPalabras();
         Mecanica.cargarPuntuacion();
-
 //        Variables
         int opt = 0;
         boolean salirjuego = false;
-
 //        Menu del juego
        while (!salirjuego){
            Mecanica.menu();
@@ -52,7 +45,7 @@ public class App {
                    salirjuego = true;
                    break;
                default:
-                   System.out.println("elija una opción válida");
+                   System.out.println("Elija una opción válida");
            }
        }
        Mecanica.guardarPuntuaciones();
