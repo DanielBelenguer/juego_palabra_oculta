@@ -19,7 +19,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            fr = new FileReader("src/archivosNecesarios/Puntuaciones.csv");
+            fr = new FileReader("src\\archivosNecesarios\\Puntuaciones.csv");
             br = new BufferedReader(fr);
             puntuaciones = new HashMap<>();
             String linea = null,nombre = null;
@@ -51,7 +51,7 @@ public class Mecanica {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter("src/archivosNecesarios/Puntuaciones.csv");
+            fw = new FileWriter("src\\archivosNecesarios\\Puntuaciones.csv");
             bw = new BufferedWriter(fw);
             for (Map.Entry<String, Integer> en : puntuaciones.entrySet()) {
                 String nombre = en.getKey();
@@ -76,7 +76,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            fr = new FileReader("src/archivosNecesarios/Palabras.txt");
+            fr = new FileReader("src\\archivosNecesarios\\Palabras.txt");
             br = new BufferedReader(fr);
             palabrasOcultas = new ArrayList<>();
             String linea = null,palabra = null;
@@ -106,7 +106,7 @@ public class Mecanica {
         FileReader fr = null;
         BufferedReader br = null;
         try{
-            fr = new FileReader("src/archivosNecesarios/Comosejuega.txt");
+            fr = new FileReader("src\\archivosNecesarios\\Comosejuega.txt");
             br = new BufferedReader(fr);
             String line;
             while ((line = br.readLine()) != null) {
@@ -131,7 +131,7 @@ public class Mecanica {
         FileOutputStream fo = null;
         ObjectOutputStream os = null;
         try {
-            fo = new FileOutputStream("src/partidasGuardadas/"+ jue.getNombreJuegoGuardado() +".bin");
+            fo = new FileOutputStream("src\\partidasGuardadas\\"+ jue.getNombreJuegoGuardado() +".bin");
             os = new ObjectOutputStream(fo);
             os.writeObject(jue);
             os.flush();
@@ -152,7 +152,7 @@ public class Mecanica {
         FileInputStream fi = null;
         ObjectInputStream is = null;
         try {
-            fi = new FileInputStream("src/partidasGuardadas/" + nombreJuego + ".bin");
+            fi = new FileInputStream("src\\partidasGuardadas\\" + nombreJuego + ".bin");
             is = new ObjectInputStream(fi);
             JuegoGuardado juegoGuardado = (JuegoGuardado) is.readObject();;
 //            Iniciar juego cargado
